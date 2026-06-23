@@ -6,40 +6,40 @@ import plotly.graph_objects as go
 # ==========================
 # LOAD MODEL
 # ==========================
-model = joblib.load(logistic_model.pkl)
-scaler = joblib.load(scaler.pkl)
+model = joblib.load("logistic_model.pkl")
+scaler = joblib.load("scaler.pkl")
 
 st.set_page_config(
-    page_title=Procrastination Prediction,
-    page_icon=📚,
-    layout=wide
+    page_title="Procrastination Prediction",
+    page_icon="📚",
+    layout="wide"
 )
 
 # ==========================
 # HEADER
 # ==========================
-st.title(📚 Student Procrastination Prediction)
+st.title("📚 Student Procrastination Prediction")
 st.markdown(
-    Prediksi tingkat procrastination berdasarkan kebiasaan belajar dan produktivitas mahasiswa.
+    "Prediksi tingkat procrastination berdasarkan kebiasaan belajar dan produktivitas mahasiswa."
 )
 
 # ==========================
 # SIDEBAR
 # ==========================
-st.sidebar.header(Tentang Model)
+st.sidebar.header("Tentang Model")
 
 st.sidebar.metric(
-    Accuracy,
-    86.25%
+    "Accuracy",
+    "86.25%"
 )
 
 st.sidebar.metric(
-    Model,
-    Logistic Regression
+    "Model",
+    "Logistic Regression"
 )
 
 st.sidebar.write(
-    Dataset Productivity vs Procrastination
+    "Dataset: Productivity vs Procrastination"
 )
 
 # ==========================
@@ -47,135 +47,135 @@ st.sidebar.write(
 # ==========================
 col1, col2 = st.columns(2)
 
-with col1
+with col1:
 
-    study_hours = st.slider(Study Hours, 0.0, 12.0, 5.0)
+    study_hours = st.slider("Study Hours", 0.0, 12.0, 5.0)
 
-    sleep_hours = st.slider(Sleep Hours, 0.0, 12.0, 7.0)
+    sleep_hours = st.slider("Sleep Hours", 0.0, 12.0, 7.0)
 
     screen_time_total = st.slider(
-        Screen Time Total,
+        "Screen Time Total",
         0.0,
         15.0,
         5.0
     )
 
     social_media_time = st.slider(
-        Social Media Time,
+        "Social Media Time",
         0.0,
         10.0,
         3.0
     )
 
     task_delay_minutes = st.slider(
-        Task Delay Minutes,
+        "Task Delay Minutes",
         0,
         300,
         30
     )
 
     focus_score = st.slider(
-        Focus Score,
+        "Focus Score",
         1,
         10,
         5
     )
 
     stress_level = st.slider(
-        Stress Level,
+        "Stress Level",
         1,
         10,
         5
     )
 
     motivation_level = st.slider(
-        Motivation Level,
+        "Motivation Level",
         1,
         10,
         5
     )
 
     study_session_length = st.slider(
-        Study Session Length,
+        "Study Session Length",
         10,
         180,
         60
     )
 
     break_frequency = st.slider(
-        Break Frequency,
+        "Break Frequency",
         0,
         20,
         5
     )
 
-with col2
+with col2:
 
     notifications_per_day = st.slider(
-        Notifications Per Day,
+        "Notifications Per Day",
         0,
         200,
         50
     )
 
     phone_pickups_per_day = st.slider(
-        Phone Pickups Per Day,
+        "Phone Pickups Per Day",
         0,
         200,
         50
     )
 
     exercise_minutes = st.slider(
-        Exercise Minutes,
+        "Exercise Minutes",
         0,
         180,
         30
     )
 
     caffeine_intake = st.slider(
-        Caffeine Intake,
+        "Caffeine Intake",
         0,
         10,
         2
     )
 
     multitasking_level = st.slider(
-        Multitasking Level,
+        "Multitasking Level",
         1,
         10,
         5
     )
 
     study_environment = st.selectbox(
-        Study Environment,
+        "Study Environment",
         [0,1,2],
-        format_func=lambda x
-        [Moderate,Noisy,Quiet][x]
+        format_func=lambda x:
+        ["Moderate","Noisy","Quiet"][x]
     )
 
     peak_productivity_time = st.selectbox(
-        Peak Productivity Time,
+        "Peak Productivity Time",
         [0,1,2],
-        format_func=lambda x
-        [Afternoon,Morning,Night][x]
+        format_func=lambda x:
+        ["Afternoon","Morning","Night"][x]
     )
 
     deadline_type = st.selectbox(
-        Deadline Type,
+        "Deadline Type",
         [0,1],
-        format_func=lambda x
-        [Fixed,Flexible][x]
+        format_func=lambda x:
+        ["Fixed","Flexible"][x]
     )
 
     task_difficulty = st.selectbox(
-        Task Difficulty,
+        "Task Difficulty",
         [0,1,2],
-        format_func=lambda x
-        [Easy,Hard,Medium][x]
+        format_func=lambda x:
+        ["Easy","Hard","Medium"][x]
     )
 
     deadline_urgency = st.slider(
-        Deadline Urgency,
+        "Deadline Urgency",
         1,
         10,
         5
@@ -184,7 +184,7 @@ with col2
 # ==========================
 # PREDICT
 # ==========================
-if st.button(🔍 Predict)
+if st.button("🔍 Predict"):
 
     input_data = np.array([[
 
@@ -220,24 +220,24 @@ if st.button(🔍 Predict)
     probabilities = model.predict_proba(input_scaled)[0]
 
     label_map = {
-        0 High Procrastination,
-        1 Low Procrastination,
-        2 Medium Procrastination
+        0: "High Procrastination",
+        1: "Low Procrastination",
+        2: "Medium Procrastination"
     }
 
     st.success(
-        fHasil Prediksi {label_map[prediction[0]]}
+        f"Hasil Prediksi: {label_map[prediction[0]]}"
     )
 
-    st.subheader(Probabilitas Prediksi)
+    st.subheader("Probabilitas Prediksi")
 
     fig = go.Figure(
         data=[
             go.Bar(
                 x=[
-                    High,
-                    Low,
-                    Medium
+                    "High",
+                    "Low",
+                    "Medium"
                 ],
                 y=probabilities
             )
@@ -245,8 +245,8 @@ if st.button(🔍 Predict)
     )
 
     fig.update_layout(
-        yaxis_title=Probability,
-        xaxis_title=Class
+        yaxis_title="Probability",
+        xaxis_title="Class"
     )
 
     st.plotly_chart(
@@ -255,5 +255,5 @@ if st.button(🔍 Predict)
     )
 
     st.info(
-        Model Accuracy  86.25%
+        "Model Accuracy : 86.25%"
     )
